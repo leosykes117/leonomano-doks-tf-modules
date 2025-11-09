@@ -70,7 +70,7 @@ resource "kubernetes_manifest" "cloudflare_token" {
   }
 }
 
-resource "kubernetes_manifest" "test-configmap" {
+resource "kubernetes_manifest" "staging-cluster-issuer" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
     kind       = "ClusterIssuer"
@@ -90,7 +90,7 @@ resource "kubernetes_manifest" "test-configmap" {
             cloudflare = {
               email = "leo.aremtz98@gmail.com"
               apiTokenSecretRef = {
-                name = kubernetes_manifest.cloudflare_token.metadata.name
+                name = kubernetes_manifest.cloudflare_token.object.metadata.name
                 key  = "api-token"
               }
             }
