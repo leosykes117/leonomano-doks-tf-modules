@@ -7,10 +7,24 @@ terraform {
   }
 }
 
+variable "traefik_sets" {
+  description = "set option for traefik helm chart"
+  type        = list(map(any))
+}
+
 provider "helm" {
   kubernetes = {
     config_path = "~/.kube/config"
   }
+}
+
+locals {
+  default_traekif_sets = [{
+    name  = "service.type"
+    value = "LoadBalancer"
+  }]
+
+  merged_sets = concat(local.default_traekif_sets, var.traefik_sets)
 }
 
 resource "helm_release" "traefik" {
@@ -20,8 +34,5 @@ resource "helm_release" "traefik" {
   namespace        = "traefik"
   create_namespace = true
 
-  set = [{
-    name  = "service.type"
-    value = "LoadBalancer"
-  }]
+  set = local.merged_sets
 }
