@@ -7,15 +7,10 @@ terraform {
   }
 }
 
-variable "traefik_sets" {
-  description = "set option for traefik helm chart"
-  type        = list(map(any))
-}
-
 variable "traefik_values" {
-  description = "Values in Yaml format for traefik"
-  type        = string
-  default     = ""
+  description = "Map of values that will be merged with the default values"
+  type        = map(any)
+  default     = {}
 }
 
 provider "helm" {
@@ -25,12 +20,13 @@ provider "helm" {
 }
 
 locals {
-  default_traekif_sets = [{
-    name  = "service.type"
-    value = "LoadBalancer"
-  }]
+  default_traekif_values = {
+    service = {
+      type = "LoadBalancer"
+    }
+  }
 
-  merged_sets = concat(local.default_traekif_sets, var.traefik_sets)
+  merged_values = merge(local.default_traekif_values, var.traefik_values)
 }
 
 resource "helm_release" "traefik" {
@@ -40,7 +36,5 @@ resource "helm_release" "traefik" {
   namespace        = "traefik"
   create_namespace = true
 
-  set = local.merged_sets
-
-  values = [var.traefik_values]
+  values = [yamlencode(local.merged_values)]
 }
