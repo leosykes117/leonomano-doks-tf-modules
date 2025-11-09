@@ -39,12 +39,19 @@ provider "helm" {
   }
 }
 
+provider "kubernetes" {
+  config_path    = "~/.kube/config"
+  config_context = "do-sfo2-dev-leonomano-projects"
+}
+
 locals {
+  namespace = "cert-manager"
   default_values = {
     crds = {
       enabled = true
     }
   }
+  cloudflare_token = sensitive(base64encode(data.aws_ssm_parameter.cloudflare_token.value))
 
   merged_values = merge(local.default_values, var.cert_manager_values)
 }
@@ -56,7 +63,7 @@ data "aws_ssm_parameter" "cloudflare_token" {
 
 resource "helm_release" "cert_manager" {
   name             = "cert-manager"
-  namespace        = "cert-manager"
+  namespace        = local.namespace
   chart            = "oci://quay.io/jetstack/charts/cert-manager"
   version          = "v1.19.1"
   create_namespace = true
@@ -69,11 +76,12 @@ resource "kubernetes_manifest" "cloudflare_token" {
     apiVersion = "v1"
     kind       = "Secret"
     metadata = {
-      name = "cloudflare-api-token-secret"
+      name      = "cloudflare-api-token-secret"
+      namespace = local.namespace
     }
     type = "Opaque"
-    stringData = {
-      api-token = "${data.aws_ssm_parameter.cloudflare_token.value}"
+    data = {
+      api-token = local.cloudflare_token
     }
   }
 }
