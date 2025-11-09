@@ -9,7 +9,7 @@ terraform {
 
 variable "traefik_values" {
   description = "Map of values that will be merged with the default values"
-  type        = map(any)
+  type        = any
   default     = {}
 }
 
