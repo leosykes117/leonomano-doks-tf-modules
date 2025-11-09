@@ -11,6 +11,7 @@ data "digitalocean_regions" "available" {
     key    = "available"
     values = ["true"]
   }
+  depends_on = [data.aws_ssm_parameter.do_token]
 }
 
 data "digitalocean_kubernetes_versions" "this" {}
