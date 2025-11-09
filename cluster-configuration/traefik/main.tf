@@ -12,6 +12,12 @@ variable "traefik_sets" {
   type        = list(map(any))
 }
 
+variable "traefik_values" {
+  description = "Values in Yaml format for traefik"
+  type        = string
+  default     = ""
+}
+
 provider "helm" {
   kubernetes = {
     config_path = "~/.kube/config"
@@ -35,4 +41,6 @@ resource "helm_release" "traefik" {
   create_namespace = true
 
   set = local.merged_sets
+
+  values = [var.traefik_values]
 }
