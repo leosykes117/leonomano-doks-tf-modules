@@ -1,47 +1,14 @@
-terraform {
-  required_providers {
-    helm = {
-      source  = "hashicorp/helm"
-      version = "3.1.0"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.38.0"
-    }
-  }
-}
-
 provider "kubernetes" {
   config_path    = "~/.kube/config"
   config_context = "do-sfo2-dev-leonomano-projects"
 }
 
-variable "traefik_values" {
-  description = "Map of values that will be merged with the default values"
-  type        = any
-  default     = {}
-}
+locals {}
 
-provider "helm" {
-  kubernetes = {
-    config_path = "~/.kube/config"
+resource "kubernetes_namespace" "traefik" {
+  metadata {
+    name = "traefik"
   }
-}
-
-locals {
-  default_traekif_values = {}
-
-  merged_values = merge(local.default_traekif_values, var.traefik_values)
-}
-
-resource "helm_release" "traefik" {
-  name             = "traefik"
-  repository       = "https://traefik.github.io/charts"
-  chart            = "traefik"
-  namespace        = "traefik"
-  create_namespace = true
-
-  values = [yamlencode(local.merged_values)]
 }
 
 resource "kubernetes_manifest" "tls_certificate" {
@@ -50,12 +17,13 @@ resource "kubernetes_manifest" "tls_certificate" {
     kind       = "Certificate"
     metadata = {
       name      = "traefik-cert"
-      namespace = "traefik"
+      namespace = kubernetes_namespace.traefik.metadata[0].name
     }
     spec = {
       secretName = "traefik-cert-tls"
       dnsNames = [
-        "gateway.leonomano.com"
+        "leonomano.com",
+        "*.leonomano.com"
       ]
       issuerRef = {
         name = "letsencrypt-staging"
@@ -63,4 +31,18 @@ resource "kubernetes_manifest" "tls_certificate" {
       }
     }
   }
+}
+
+resource "random_password" "dashboard_pass" {
+  length  = 16
+  special = true
+}
+
+resource "aws_ssm_parameter" "traefik_dashboard_hash" {
+  name        = "/account-configuration/${var.env}/traefik/dashboard/auth/admin/password"
+  description = "Traefik dashboard bcrypt password for admin user"
+  type        = "SecureString"
+  value = jsonencode({
+    password = random_password.dashboard_pass.result
+  })
 }
