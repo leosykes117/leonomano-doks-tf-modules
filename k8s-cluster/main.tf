@@ -44,7 +44,7 @@ resource "digitalocean_kubernetes_cluster" "k8s_cluster" {
   }
 }
 
-resource "null_resource" "merge_kubeconfig" {
+/*resource "null_resource" "merge_kubeconfig" {
   depends_on = [digitalocean_kubernetes_cluster.k8s_cluster]
 
   provisioner "local-exec" {
@@ -52,4 +52,4 @@ resource "null_resource" "merge_kubeconfig" {
     doctl kubernetes cluster kubeconfig save ${digitalocean_kubernetes_cluster.k8s_cluster.name} -t ${data.aws_ssm_parameter.do_token.value}
     EOT
   }
-}
+}*/

@@ -36,6 +36,10 @@ resource "kubernetes_manifest" "tls_certificate" {
 resource "random_password" "dashboard_pass" {
   length  = 16
   special = true
+  provisioner "local-exec" {
+    command    = "htpasswd -cbB .htpasswd admin ${self.result}"
+    on_failure = fail
+  }
 }
 
 resource "aws_ssm_parameter" "traefik_dashboard_hash" {
