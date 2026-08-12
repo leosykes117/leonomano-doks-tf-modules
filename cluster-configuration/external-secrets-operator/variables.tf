@@ -33,3 +33,8 @@ variable "create_eso_namespace" {
   type        = bool
   default     = false
 }
+
+variable "aws_account_id" {
+  description = "AWS account id to scope IAM resources to (optional, but recommended)"
+  type        = string
+}

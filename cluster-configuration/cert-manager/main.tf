@@ -1,21 +1,6 @@
-terraform {
-  required_providers {
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.38.0"
-    }
-  }
-}
-
-variable "env" {
-  description = "Project Environment"
-  type        = string
-  default     = "dev"
-}
-
 provider "kubernetes" {
-  config_path    = "~/.kube/config"
-  config_context = "do-sfo2-dev-leonomano-projects"
+  config_path    = var.kube_config_path
+  config_context = var.kube_ctx
 }
 
 locals {

@@ -2,15 +2,15 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.98.0"
+      version = "6.52.0"
     }
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "2.54.0"
+      version = "2.92.0"
     }
     local = {
       source  = "hashicorp/local"
-      version = "2.5.3"
+      version = "2.9.0"
     }
   }
 }

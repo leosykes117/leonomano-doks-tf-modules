@@ -21,3 +21,9 @@ variable "kube_ctx" {
   type        = string
   default     = "minikube"
 }
+
+variable "kube_config_path" {
+  description = "Kubernetes config path"
+  type        = string
+  default     = "~/.kube/config"
+}
