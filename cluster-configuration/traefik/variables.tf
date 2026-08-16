@@ -15,15 +15,3 @@ variable "aws_region" {
   type        = string
   default     = "us-east-1"
 }
-
-variable "kube_ctx" {
-  description = "Kubernetes context"
-  type        = string
-  default     = "minikube"
-}
-
-variable "kube_config_path" {
-  description = "Kubernetes config path"
-  type        = string
-  default     = "~/.kube/config"
-}

@@ -16,25 +16,13 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "kube_config_path" {
-  description = "Kubernetes config path"
-  type        = string
-  default     = "~/.kube/config"
-}
-
-variable "kube_ctx" {
-  description = "Kubernetes context"
-  type        = string
-  default     = "minikube"
-}
-
-variable "create_eso_namespace" {
-  description = "enable external-secrets namespace creation"
-  type        = bool
-  default     = false
-}
-
 variable "aws_account_id" {
   description = "AWS account id to scope IAM resources to (optional, but recommended)"
   type        = string
+}
+
+variable "k8s_cluster_name" {
+  description = "Kubernetes Cluster Name"
+  type        = string
+  default     = "minikube"
 }
