@@ -8,9 +8,5 @@ terraform {
       source  = "digitalocean/digitalocean"
       version = "2.92.0"
     }
-    local = {
-      source  = "hashicorp/local"
-      version = "2.9.0"
-    }
   }
 }
