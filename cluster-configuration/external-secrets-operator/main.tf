@@ -70,7 +70,7 @@ resource "aws_ssm_parameter" "k8s_eso_ssm_secret_store_access_credentials" {
   description = "Access credentials for External Secrets Operator to read/write parameters in AWS Parameter Store"
   type        = "SecureString"
   value = jsonencode({
-    "access-key-id"     = aws_iam_access_key.k8s_eso_aws_access.id,
-    "secret-access-key" = aws_iam_access_key.k8s_eso_aws_access.secret
+    access-key-id     = aws_iam_access_key.k8s_eso_aws_access.id,
+    secret-access-key = aws_iam_access_key.k8s_eso_aws_access.secret
   })
 }
