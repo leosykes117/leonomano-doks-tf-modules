@@ -1,8 +1,9 @@
 locals {}
 
 resource "random_password" "dashboard_pass" {
-  length  = 16
-  special = true
+  length           = 16
+  special          = true
+  override_special = "!@#$%-_+?"
   provisioner "local-exec" {
     command    = "htpasswd -cbB .htpasswd admin ${self.result}"
     on_failure = fail
