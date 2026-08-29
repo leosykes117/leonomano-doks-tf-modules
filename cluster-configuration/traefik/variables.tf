@@ -15,14 +15,3 @@ variable "aws_region" {
   type        = string
   default     = "us-east-1"
 }
-
-variable "aws_account_id" {
-  description = "AWS account id to scope IAM resources to (optional, but recommended)"
-  type        = string
-}
-
-variable "k8s_cluster_name" {
-  description = "Kubernetes Cluster Name"
-  type        = string
-  default     = "minikube"
-}

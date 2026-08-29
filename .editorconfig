@@ -1,0 +1,26 @@
+# EditorConfig helps maintain consistent coding styles across various IDEs
+# More details at https://editorconfig.org
+root = true
+
+# Global defaults for all files
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Terraform specific overrides
+[*.{tf,tfvars}]
+indent_style = space
+indent_size = 2
+
+# Markdown documentation configuration
+[*.md]
+trim_trailing_whitespace = false
+
+# Tab-indented files (if your module infrastructure contains automation)
+[Makefile]
+indent_style = tab
+indent_size = 4
